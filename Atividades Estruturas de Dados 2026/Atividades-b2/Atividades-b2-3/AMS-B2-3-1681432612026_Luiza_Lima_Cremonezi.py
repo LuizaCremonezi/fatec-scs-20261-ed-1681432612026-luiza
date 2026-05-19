@@ -6,257 +6,190 @@
                    * Data: 12/05/2026 *
 *---------------------------------------------------------*'''
 
-class No:
-    def __init__(self, valor):
-        self.valor = valor
-        self.esq = None
-        self.dir = None
+# analisar arvore
+def analisar_arvore(self, valor_busca):
 
+    print("\n===== DIAGNOSTICO DA ARVORE =====")
 
-class ArvoreBST:
-    def __init__(self, raiz=None):
-        self.raiz = raiz
+    if self.raiz != None:
+        print(f"\nRaiz: {self.raiz.valor}")
 
-    # inserir na arvore
-    def inserir(self, valor):
+    self.imprimir_nos_internos()
 
-        novoNo = No(valor)
+    self.imprimir_folhas()
 
-        if self.raiz == None:
-            self.raiz = novoNo
-            return
+    self.imprimir_niveis()
 
-        at = self.raiz
+    no = self.buscar(self.raiz, valor_busca)
 
-        while True:
+    if no == None:
+        print("\nValor nao encontrado")
+        return
 
-            if valor < at.valor:
+    print(f"\nNo analisado: {valor_busca}")
 
-                if at.esq == None:
-                    at.esq = novoNo
-                    break
+    print("Altura:", self.calcular_altura(no))
 
-                at = at.esq
+    print("Profundidade:", self.calcular_profundidade(valor_busca))
 
-            else:
+    self.imprimir_ancestrais(valor_busca)
 
-                if at.dir == None:
-                    at.dir = novoNo
-                    break
+    self.imprimir_descendentes(valor_busca)
 
-                at = at.dir
 
-    # buscar um no
-    def buscar(self, no, valor):
+# nos internos
+def imprimir_nos_internos(self):
 
-        if no == None:
-            return None
+    print("\nNos internos:")
 
-        if no.valor == valor:
-            return no
+    self._internos(self.raiz)
 
-        if valor < no.valor:
-            return self.buscar(no.esq, valor)
+def _internos(self, no):
 
-        else:
-            return self.buscar(no.dir, valor)
+    if no != None:
 
-    # mostrar nos internos
-    def imprimir_nos_internos(self):
-
-        print("\nNos internos:")
-        self._internos(self.raiz)
-
-    def _internos(self, no):
-
-        if no != None:
-
-            if no.esq != None or no.dir != None:
-                print(no.valor)
-
-            self._internos(no.esq)
-            self._internos(no.dir)
-
-    # mostrar folhas
-    def imprimir_folhas(self):
-
-        print("\nFolhas:")
-        self._folhas(self.raiz)
-
-    def _folhas(self, no):
-
-        if no != None:
-
-            if no.esq == None and no.dir == None:
-                print(no.valor)
-
-            self._folhas(no.esq)
-            self._folhas(no.dir)
-
-    # imprimir por niveis
-    def imprimir_niveis(self):
-
-        if self.raiz == None:
-            return
-
-        fila = [(self.raiz, 0)]
-
-        nivAt = 0
-
-        print("\nArvore por niveis:")
-
-        while len(fila) > 0:
-
-            no, niv = fila.pop(0)
-
-            if niv != nivAt:
-                print()
-                nivAt = niv
-
-            print(f"Nivel {niv}: {no.valor}")
-
-            if no.esq:
-                fila.append((no.esq, niv + 1))
-
-            if no.dir:
-                fila.append((no.dir, niv + 1))
-
-    # calcular altura
-    def calcular_altura(self, no):
-
-        if no == None:
-            return -1
-
-        altEsq = self.calcular_altura(no.esq)
-        altDir = self.calcular_altura(no.dir)
-
-        if altEsq > altDir:
-            return altEsq + 1
-
-        else:
-            return altDir + 1
-
-    # profundidade do no
-    def calcular_profundidade(self, valor):
-
-        return self._prof(self.raiz, valor, 0)
-
-    def _prof(self, no, valor, prof):
-
-        if no == None:
-            return -1
-
-        if no.valor == valor:
-            return prof
-
-        if valor < no.valor:
-            return self._prof(no.esq, valor, prof + 1)
-
-        else:
-            return self._prof(no.dir, valor, prof + 1)
-
-    # ancestrais
-    def imprimir_ancestrais(self, valor):
-
-        print(f"\nAncestrais do no {valor}:")
-
-        lst = []
-
-        self._ancestrais(self.raiz, valor, lst)
-
-        for x in lst:
-            print(x)
-
-    def _ancestrais(self, no, valor, lst):
-
-        if no == None:
-            return False
-
-        if no.valor == valor:
-            return True
-
-        achou = self._ancestrais(no.esq, valor, lst)
-
-        if achou == False:
-            achou = self._ancestrais(no.dir, valor, lst)
-
-        if achou:
-            lst.append(no.valor)
-            return True
-
-        return False
-
-    # descendentes
-    def imprimir_descendentes(self, valor):
-
-        no = self.buscar(self.raiz, valor)
-
-        if no == None:
-            print("No nao encontrado")
-            return
-
-        print(f"\nDescendentes do no {valor}:")
-
-        self._desc(no.esq)
-        self._desc(no.dir)
-
-    def _desc(self, no):
-
-        if no != None:
-
+        if no.esq != None or no.dir != None:
             print(no.valor)
 
-            self._desc(no.esq)
-            self._desc(no.dir)
+        self._internos(no.esq)
+        self._internos(no.dir)
 
-    # grau do no
-    def grau_no(self, valor):
 
-        no = self.buscar(self.raiz, valor)
+# folhas
+def imprimir_folhas(self):
 
-        if no == None:
-            return -1
+    print("\nFolhas:")
 
-        grau = 0
+    self._folhas(self.raiz)
+
+def _folhas(self, no):
+
+    if no != None:
+
+        if no.esq == None and no.dir == None:
+            print(no.valor)
+
+        self._folhas(no.esq)
+        self._folhas(no.dir)
+
+
+# imprimir niveis
+def imprimir_niveis(self):
+
+    if self.raiz == None:
+        return
+
+    fila = [(self.raiz, 0)]
+
+    niv_at = 0
+
+    print("\nArvore por niveis:")
+
+    while len(fila) > 0:
+
+        no, niv = fila.pop(0)
+
+        if niv != niv_at:
+            print()
+            niv_at = niv
+
+        print(f"Nivel {niv}: {no.valor}")
 
         if no.esq != None:
-            grau += 1
+            fila.append((no.esq, niv + 1))
 
         if no.dir != None:
-            grau += 1
+            fila.append((no.dir, niv + 1))
 
-        return grau
 
-    # analisar arvore
-    def analisar_arvore(self, valorBusca):
+# altura
+def calcular_altura(self, no):
 
-        print("\n===== DIAGNOSTICO DA ARVORE =====")
+    if no == None:
+        return -1
 
-        if self.raiz != None:
-            print(f"\nRaiz: {self.raiz.valor}")
+    alt_esq = self.calcular_altura(no.esq)
 
-        self.imprimir_nos_internos()
+    alt_dir = self.calcular_altura(no.dir)
 
-        self.imprimir_folhas()
+    if alt_esq > alt_dir:
+        return alt_esq + 1
 
-        self.imprimir_niveis()
+    return alt_dir + 1
 
-        print("\n===== ANALISE DO NO =====")
 
-        no = self.buscar(self.raiz, valorBusca)
+# profundidade
+def calcular_profundidade(self, valor):
 
-        if no == None:
-            print("Valor nao encontrado")
-            return
+    return self._prof(self.raiz, valor, 0)
 
-        print(f"\nNo analisado: {valorBusca}")
+def _prof(self, no, valor, prof):
 
-        print("Grau do no:", self.grau_no(valorBusca))
+    if no == None:
+        return -1
 
-        print("Profundidade:", self.calcular_profundidade(valorBusca))
+    if no.valor == valor:
+        return prof
 
-        print("Altura:", self.calcular_altura(no))
+    if valor < no.valor:
+        return self._prof(no.esq, valor, prof + 1)
 
-        self.imprimir_ancestrais(valorBusca)
+    return self._prof(no.dir, valor, prof + 1)
 
-        self.imprimir_descendentes(valorBusca)
+
+# ancestrais
+def imprimir_ancestrais(self, valor):
+
+    print(f"\nAncestrais do no {valor}:")
+
+    lst = []
+
+    self._ancestrais(self.raiz, valor, lst)
+
+    for x in lst:
+        print(x)
+
+def _ancestrais(self, no, valor, lst):
+
+    if no == None:
+        return False
+
+    if no.valor == valor:
+        return True
+
+    achou = self._ancestrais(no.esq, valor, lst)
+
+    if achou == False:
+        achou = self._ancestrais(no.dir, valor, lst)
+
+    if achou:
+        lst.append(no.valor)
+        return True
+
+    return False
+
+
+# descendentes
+def imprimir_descendentes(self, valor):
+
+    no = self.buscar(self.raiz, valor)
+
+    if no == None:
+        print("No nao encontrado")
+        return
+
+    print(f"\nDescendentes do no {valor}:")
+
+    self._desc(no.esq)
+
+    self._desc(no.dir)
+
+def _desc(self, no):
+
+    if no != None:
+
+        print(no.valor)
+
+        self._desc(no.esq)
+
+        self._desc(no.dir)
